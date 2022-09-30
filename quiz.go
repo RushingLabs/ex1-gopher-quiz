@@ -6,10 +6,30 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
-	csvReader()
+	consoleInput := bufio.NewReader(os.Stdin)
+	fmt.Println("Press Enter to continue...")
+	text, err := consoleInput.ReadString('\n')
+	if err != nil {
+		fmt.Println("An error occured while reading input. Please try again", err)
+		return
+	}
+	fmt.Printf(text) // `text` is ONLY "\r\n" for an Enter keypress
+	if strings.Compare(text, "\r\n") == 0 {
+		fmt.Print("Starting timer...")
+	}
+
+	timer := time.NewTimer(5 * time.Second)
+
+	// notifying the channel
+	<-timer.C
+
+	fmt.Println("Timer is inactivated")
+
+	// csvReader()
 }
 
 func csvReader() {
@@ -35,6 +55,7 @@ func csvReader() {
 		input, err := inputReader.ReadString('\n')
 		input = strings.Replace(input, "\r\n", "", -1) // Remove the delimiting chars on OS input
 
+		// TODO : Replace ending character based on detected OS.
 		// if OS == Windows {
 		// 	input = strings.Replace(input, "\r\n", "", -1)
 		// } else if OS == Linux {
