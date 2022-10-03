@@ -39,10 +39,11 @@ func main() {
 		fmt.Println("Starting timer...")
 	}
 
-	// Setup timer.
-	timer := time.NewTimer(time.Duration(flag_timer) * time.Second)
-	// Use a goroutine to increment timer on separate
-	go func() {
+	/*
+	* Setup a timer that will "tick" in the background while the quiz takes place.
+	 */
+	timer := time.NewTimer(time.Duration(flag_timer) * time.Second) // Setup timer.
+	go func() {                                                     // Use a goroutine to increment timer on separate
 		<-timer.C
 		fmt.Println("Timer 2 fired")
 
@@ -54,26 +55,31 @@ func main() {
 	csvReader(&scoreTracker)
 }
 
+/*
+* csvReader()
+* - Reading the CSV file happens in here
+* - Using a for-loop to make the quiz "work"
+ */
 func csvReader(scoreTracker *int) {
 	inputReader := bufio.NewReader(os.Stdin)
 
-	// 1. open file
+	// Open file
 	recordFile, err := os.Open("./problems.csv")
 	if err != nil {
 		fmt.Println("An error encountered ::", err)
 	}
 
-	reader := csv.NewReader(recordFile) // 2. initialize reader
-	records, _ := reader.ReadAll()      // 3. read all records
+	reader := csv.NewReader(recordFile) // Initialize reader
+	records, _ := reader.ReadAll()      // Read all records
 	lengthOfQuiz = len(records)         // update length of quiz tracker
 
-	// 4. iterate through records
+	// Iterate through records
+	// Format: record -> [0] - question, [1] - answer
 	for i := 0; i < len(records); i++ {
 		fmt.Println("What is: " + records[i][0])
 
 		input, err := inputReader.ReadString('\n')
 		input = strings.Replace(input, "\r\n", "", -1) // Remove the delimiting chars on OS input
-
 		if err != nil {
 			fmt.Println("An error occured while reading input. Please try again", err)
 			return
@@ -85,9 +91,15 @@ func csvReader(scoreTracker *int) {
 		}
 	}
 
+	// Exit the program because we completed the quiz
 	exitProgram(*scoreTracker, false)
 }
 
+/*
+* exitProgram()
+* - Forcefully exits the program
+* - Prints the final message
+ */
 func exitProgram(scoreTracker int, outOfTime bool) {
 	if outOfTime {
 		// Timer expired before finishing quiz!
