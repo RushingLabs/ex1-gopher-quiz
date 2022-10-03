@@ -9,8 +9,14 @@ import (
 	"time"
 )
 
+/*
+* Globals
+* - lengthOfQuiz: easy access for tracking length of quiz across the program.
+ */
+var lengthOfQuiz int = 0
+
 func main() {
-	// var timerLength int64 = 5 // 30
+	var timerLength int64 = 45 // 30
 	var scoreTracker int = 0
 
 	consoleInput := bufio.NewReader(os.Stdin)
@@ -22,23 +28,25 @@ func main() {
 	}
 
 	if strings.Compare(text, "\r\n") == 0 { // `text` is ONLY "\r\n" for an Enter keypress
-		fmt.Print("Starting timer...")
+		fmt.Println("Starting timer...")
 	}
 
-	timer2 := time.NewTimer(45 * time.Second)
+	// Setup timer.
+	timer := time.NewTimer(time.Duration(timerLength) * time.Second)
+	// Use a goroutine to increment timer on separate
 	go func() {
-		<-timer2.C
+		<-timer.C
 		fmt.Println("Timer 2 fired")
 
 		// Timer has ended. Need to exit program.
-		exitProgram(scoreTracker)
+		exitProgram(scoreTracker, true)
 	}()
 
+	// Start reading through the CSV for the quiz information.
 	csvReader(&scoreTracker)
 }
 
 func csvReader(scoreTracker *int) {
-	// var score int = 0
 	inputReader := bufio.NewReader(os.Stdin)
 
 	// 1. open file
@@ -49,6 +57,7 @@ func csvReader(scoreTracker *int) {
 
 	reader := csv.NewReader(recordFile) // 2. initialize reader
 	records, _ := reader.ReadAll()      // 3. read all records
+	lengthOfQuiz = len(records)         // update length of quiz tracker
 
 	// 4. iterate through records
 	for i := 0; i < len(records); i++ {
@@ -62,18 +71,25 @@ func csvReader(scoreTracker *int) {
 			return
 		}
 
+		// Check answer for correctness. Increment score if correct.
 		if strings.Compare(input, records[i][1]) == 0 {
 			*scoreTracker = *scoreTracker + 1
 		}
 	}
 
-	exitProgram(*scoreTracker)
+	exitProgram(*scoreTracker, false)
 }
 
-func exitProgram(scoreTracker int) {
-	// fmt.Printf("Finished! Your score is: %v/%v", scoreTracker, len(records))
-	fmt.Printf("Finished! You got %v right.", scoreTracker)
-	fmt.Println("Program exit. Status code: 3")
+func exitProgram(scoreTracker int, outOfTime bool) {
+	if outOfTime {
+		// Timer expired before finishing quiz!
+		fmt.Println("TIME UP!")
+		fmt.Printf("You got %v right, out of %v", scoreTracker, lengthOfQuiz)
+	} else {
+		fmt.Printf("Finished! You got %v right, out of %v", scoreTracker, lengthOfQuiz)
+	}
+
+	fmt.Println()
 	os.Exit(3)
 }
 
