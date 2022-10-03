@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -14,9 +15,16 @@ import (
 * - lengthOfQuiz: easy access for tracking length of quiz across the program.
  */
 var lengthOfQuiz int = 0
+var flag_timer int
+
+func init() {
+	// Default timer is 30 seconds
+	flag.IntVar(&flag_timer, "timer", 30, "Set the time duration (in seconds) for the quiz.")
+	flag.Parse()
+}
 
 func main() {
-	var timerLength int64 = 45 // 30
+	fmt.Printf("Timer flag is: %v\n", flag_timer)
 	var scoreTracker int = 0
 
 	consoleInput := bufio.NewReader(os.Stdin)
@@ -32,7 +40,7 @@ func main() {
 	}
 
 	// Setup timer.
-	timer := time.NewTimer(time.Duration(timerLength) * time.Second)
+	timer := time.NewTimer(time.Duration(flag_timer) * time.Second)
 	// Use a goroutine to increment timer on separate
 	go func() {
 		<-timer.C
