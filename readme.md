@@ -1,4 +1,17 @@
-# Exercise 1 - Quiz Program via CSV
+# Exercise 1 - Quiz Game via CSV
+
+_Credit to [Gophercises](https://gophercises.com/)!_
+
+
+> _Gophercises is an excellent collection of exercises for learning 
+the Go programming language. They are provided FREE of charge, and you only have to provide
+your email address. I think that's a pretty fair trade. I am publishing these exercise 
+solutions here as part of my own learning, and **also** in case they can help someone else. 
+Please don't read ahead without trying the exercises first!_
+
+[https://gophercises.com/](https://gophercises.com/)
+
+---
 
 Ref: [https://courses.calhoun.io/lessons/les_goph_01](https://courses.calhoun.io/lessons/les_goph_01)
 
@@ -20,6 +33,7 @@ Pt. 2 - TO DO:
   - _Note: Quiz needs to exit when timer hits "0"; **not wait for user to answer question!**_
 - Prompt user to hit "Enter" before starting timer
 
+---
 
 ## How to Run
 
@@ -30,8 +44,8 @@ Pt. 2 - TO DO:
 
 ## Questions, Research
 
-A listing of some of the reference items I encountered while 
-writing this.
+A list of some of the reference items I encountered while writing this. In no
+particular order:
 
 ### How to find length of array
 
