@@ -52,10 +52,23 @@ for i := 0; i < 9; i++ {
 }
 ```
 
+### Read Console Input
+
+- Ref: [https://tutorialedge.net/golang/reading-console-input-golang/](https://tutorialedge.net/golang/reading-console-input-golang/)
+- Ref: [https://freshman.tech/snippets/go/read-console-input/](https://freshman.tech/snippets/go/read-console-input/)
+
+```go
+reader := bufio.NewReader(os.Stdin)
+text, _ := reader.ReadString('\n')
+// Removing line ending char(s). Windows, CRLF (\r\n). Unix-based, CR (\r).
+text = strings.Replace(text, "\r\n", "", -1)
+```
+
 
 ### CSV Resources
 
 - csv package: [https://pkg.go.dev/encoding/csv](https://pkg.go.dev/encoding/csv)
+- CSV tutorial: [https://medium.com/@barunthapa/working-with-csv-in-go-50a4f540e623](https://medium.com/@barunthapa/working-with-csv-in-go-50a4f540e623)
 
 
 ### Print int in string
@@ -66,3 +79,11 @@ Ref: [https://golang.cafe/blog/golang-int-to-string-conversion-example.html](htt
 input = "test"
 fmt.Printf("length: %v", len(input))
 ```
+
+### Time Duration
+
+Ref: [https://pkg.go.dev/time#Duration](https://pkg.go.dev/time#Duration)
+
+### Exiting a Program
+
+Ref: [https://gobyexample.com/exit](https://gobyexample.com/exit)
